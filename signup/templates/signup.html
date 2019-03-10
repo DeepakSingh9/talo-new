@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <form method="POST" action="{% url 'login' %}">
+      <!--<ul class="form-list">-->
+      {% csrf_token %}
+     <input type="text" placeholder="Username" name="username" value=""  class='validate'>
+     <input type="password" placeholder="Password" name="password" value="" class='validate' >
+        <p> <a class="mainn-right-link" href="forgot-password.html">Forgot password?</a></p></li>
+
+      <button type="submit" value="Login" class="btnb btn">Login</button>
+  </form>
+  <br>
+  <p>----------------------------------------------------------------------------------</p>
+  <form method="POST" action="{% url 'registration' %}">
+    {% csrf_token %}
+      {{userlogin.as_p}}
+      {{userregister.as_p}}
+    <!-- <input type="text" placeholder="Username" name="username" value=""  class='validate'>
+     <input type="password" placeholder="Password" name="password" value="" class='validate' >
+      <input type="text" placeholder="first name" name="first_name" value=""  class='validate'>
+     <input type="text" placeholder="last_name" name="last_name" value="" class='validate' >
+      <input type="email" placeholder="email" name="email" value=""  class='validate'>
+     <input type="text" placeholder="who-you-are" name="description " value="" class='validate' >-->
+    <button type="submit">submit
+    </button>
+  </form>
+  </body>
+</html>

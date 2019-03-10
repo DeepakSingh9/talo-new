@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+     <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+<body>
+  <nav>
+    <div class="nav-wrapper white">
+        <a href="#" class="brand-logo center black-text">TALOSCOPE</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="collapsible.html"><span class="black-text">Resume</span></a></li>
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'logout' %}"><span class="black-text">logout</span></a></li>
+          {% else %}
+          <li><a href="{% url 'signup' %}"><span class="black-text">Components</span></a></li>
+          {% endif %}
+
+      </ul>
+    </div>
+  </nav>
+
+  {% block content %}
+  {% endblock %}
+
+</body>
+</html>
