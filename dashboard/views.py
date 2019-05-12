@@ -11,9 +11,13 @@ from dashboard.models import Profile,Skills,ProfileContact
 from django.contrib.auth import login,logout,authenticate
 # Create your views here.
 
-def home(request):
-    return render(request,'dashboard/home.html',{})
-
+def home(request,username):
+    user=request.user
+    profile=User.objects.get(username=username)
+    if username != user.username:
+        return render(request,'dashboard/profile.html',{'profile':profile})
+    else:
+        return render(request,'dashboard/home.html',{'user':user})
 
 
 @login_required()
@@ -40,17 +44,18 @@ def profile_image_upload(request,pk):
 def uploadskills(request):
     if request.method == 'POST':
         user = request.user
+        profile=Profile.objects.get(id=user.id)
         form = PostForm(request.POST,request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            post.profile = user
+            post.profile = profile
             post.save()
             return redirect('/')
         else:
             print (form.errors)
     else:
         form = PostForm()
-    return render(request, 'dashboard/uploadskills.html', {'form': form})
+    return render(request, 'dashboard/uploadskills.html', {'form': form,})
 
 
 def aboutme(request,pk):
@@ -176,3 +181,17 @@ def delete_contact(request,pk):
     contact.delete()
     return redirect('/')
 
+@login_required()
+def follow(request,pk):
+    profile=get_object_or_404(User,id=pk)
+    user=request.user
+    if user.is_authenticated():
+        if user.id != get_object_or_404(User,id=pk):
+            try:
+                profile.profile.followed_by.add(user.profile)
+                following = True
+                return redirect('home',username=profile.username)
+            except ObjectDoesNotExist:
+                return HttpResponse('The author you are following has removed the account')
+
+    return redirect(request,'/',{})

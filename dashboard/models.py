@@ -21,6 +21,8 @@ class Profile(models.Model):
     about_me=models.TextField(max_length=150,blank=True)
     #skills=models.ManyToManyField(Skill,blank=True,null=True,related_name='has_skills')
     place=models.CharField(max_length=20,blank=True,null=True)
+    followed_by=models.ManyToManyField('self',related_name='follows',symmetrical=False)
+
 
 
 
@@ -35,9 +37,10 @@ class Profile(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=128)
     created = models.DateTimeField(auto_now=True)
-    profile = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     likes = models.IntegerField(blank=True, null=True)
     video = models.FileField(upload_to='videos/', blank=True,null=True)
+
 
 
     def __str__(self):

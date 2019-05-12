@@ -1,9 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+{% load staticfiles %}
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
      <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="{% static 'mystyle.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
     <!-- Compiled and minified JavaScript -->
@@ -13,22 +14,32 @@
 </head>
 <body>
   <nav>
-    <div class="nav-wrapper white">
-        <a href="#" class="brand-logo center black-text">TALOSCOPE</a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li><a href="collapsible.html"><span class="black-text">Resume</span></a></li>
-          {% if user.is_authenticated %}
-          <li><a href="{% url 'logout' %}"><span class="black-text">logout</span></a></li>
+{% if user.is_authenticated %}
+    <div class="nav-wrapper black white-text">
+        <a href="{% url 'home' username=user.username %}" class="brand-logo right ">TALOSCOPE</a>
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+          <li class=""><a href="{% url 'resume' username=user.username %}"><span class="">Resume</span></a></li>
+          <li class=""><a href="{% url 'logout' %}"><span class="">logout</span></a></li>
           {% else %}
+          <div class="nav-wrapper black white-text">
+        <a href="#" class="brand-logo right ">TALOSCOPE</a>
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+          <li class=""><a href="collapsible.html"><span class="">Resume</span></a></li>
           <li><a href="{% url 'signup' %}"><span class="black-text">Components</span></a></li>
           {% endif %}
-
       </ul>
     </div>
   </nav>
+<div class="center-align">
+    <ul class="center-align">
+        <li>All</li>
+        <li>resume</li>
+    </ul>
 
+
+<div class="">
   {% block content %}
   {% endblock %}
-
+</div>
 </body>
 </html>

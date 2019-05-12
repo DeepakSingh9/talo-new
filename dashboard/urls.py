@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from . import views
 
-urlpatterns=[url(r'^$',views.home,name='home'),
+urlpatterns=[url(r'^home/(?P<username>[\w.@+-]+)/$',views.home,name='home'),
              #url(r'^account/(?P<pk>\d+)/$',views.account,name='account'),
              url(r'^image_upload/(?P<pk>\d+)/$',views.profile_image_upload,name='image_upload'),
              url(r'^uploadskills/$',views.uploadskills,name='uploadskills'),
@@ -14,9 +14,5 @@ urlpatterns=[url(r'^$',views.home,name='home'),
              url(r'^addcontact/$',views.addcontact,name='addcontact'),
              url(r'^edit_contact/(?P<pk>\d+)/$',views.edit_contact,name='edit_contact'),
              url(r'^delete_contact/(?P<pk>\d+)/$',views.delete_contact,name='delete_contact'),
-
-
-
-
-
+             url(r'^follow/(?P<pk>\d+)/$',views.follow,name='follow'),
 ]

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'dashboard',
     'signup',
     'phone_field',
+    'resume',
 ]
 
 MIDDLEWARE = [

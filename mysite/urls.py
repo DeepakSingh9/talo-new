@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^',include('dashboard.urls')),
     url(r'^',include('signup.urls')),
+    url(r'^',include('resume.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -10,3 +10,48 @@ background-color:#333;
 li{
 float:left
 }
+
+body{
+background-image:url("/static/Blue-Background.jpg");
+background-repeat:no-repeat;
+background-size:2000px 400px;
+
+}
+
+h6.name{
+font-size:20px;
+font-weight:bold;
+}
+
+p.name{
+font-weight:bold;
+margin-top:5px;
+font-color:#e0e0e0;
+}
+
+
+.div-hori{
+    position:absolute;
+    left:50%;
+    top:10%;
+    bottom:10%;
+    border-left:1px solid white;
+}
+
+.work_date{
+      font-size:12px;
+      font-weight:bold;
+      margin-top:3.2px;
+}
+
+.work_org{
+    font-size:15px;
+    font-weight:bold;
+    margin-top:none;
+
+}
+
+.description{
+    font-size:14px;
+    margin-top:none;
+    }

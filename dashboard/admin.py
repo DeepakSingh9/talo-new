@@ -10,7 +10,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display=['video','title']
+    list_display=['video','title','profile']
 
 class ContactAdmin(admin.ModelAdmin):
     list_display=['phone']
