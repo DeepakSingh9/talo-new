@@ -1,18 +1,26 @@
-
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
-
-<html>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" value="upload">
-</form>
-
-</html>
-</body>
-</html>
+{% extends 'dashboard/base.html' %}
+{% block content %}
+<div class="container grey-darken-2 ">
+<div class="row" style="padding=10px;margin:10px;">
+      <div class="col center-align"><h4>Add Skills</h4></div>
+          <form class="col s12 center-align" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="input-field col s6">
+                  <i class="material-icons prefix indigo-text text-darken-4">local_phone</i>
+                 <input name="phone" type="text" class="validate" id="id_phone">
+                  <label for="id_phone">Phone</label>
+              </div>
+              <div class="row">
+              <div class="input-field col s6">
+                  <i class="material-icons prefix indigo-text text-darken-4">location_city</i>
+                 <input name="city" type="text" class="validate" id="id_city">
+                  <label for="id_city">City</label>
+              </div>
+                  </div>
+              <div class="col s12 center-align">
+              <button type="submit" class="waves-effect waves-light btn-small indigo indigo-darken-4">Add</button>
+              </div>
+          </form>
+      </div>
+</div>
+{% endblock %}

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.conf import settings
 from phone_field import PhoneField
-
+import datetime
 
 
 
@@ -21,7 +21,23 @@ class Profile(models.Model):
     about_me=models.TextField(max_length=150,blank=True)
     #skills=models.ManyToManyField(Skill,blank=True,null=True,related_name='has_skills')
     place=models.CharField(max_length=20,blank=True,null=True)
-    followed_by=models.ManyToManyField('self',related_name='follows',symmetrical=False)
+    #followed_by=models.ManyToManyField('self',related_name='follows',symmetrical=False)
+    masters_degree_name = models.CharField(max_length=150, blank=True, default='')
+    masters_college_name = models.CharField(max_length=150, blank=True)
+    masters_education_from = models.DateField(default=datetime.date.today,blank=True)
+    masters_education_till = models.DateField(default=datetime.date.today,blank=True)
+    bachelors_degree = models.CharField(max_length=150, blank=True)
+    bachelors_college_name = models.CharField(max_length=150, blank=True)
+    bachelors_education_from = models.DateField(default=datetime.date.today,blank=True)
+    bachelors_education_till = models.DateField(default=datetime.date.today,blank=True)
+    High_School_degree = models.CharField(max_length=150, blank=True)
+    High_School_name = models.CharField(max_length=150, blank=True)
+    High_School_from = models.DateField(default=datetime.date.today,blank=True)
+    High_School_till = models.DateField(default=datetime.date.today,blank=True)
+    Junior_degree = models.CharField(max_length=150, blank=True)
+    Junior_School_name = models.CharField(max_length=150, blank=True)
+    Junior_School_from = models.DateField(default=datetime.date.today,blank=True)
+    Junior_School_till = models.DateField(default=datetime.date.today,blank=True)
 
 
 
@@ -40,6 +56,7 @@ class Post(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     likes = models.IntegerField(blank=True, null=True)
     video = models.FileField(upload_to='videos/', blank=True,null=True)
+    introduction=models.BooleanField(blank=True,default=False)
 
 
 
@@ -49,8 +66,8 @@ class Post(models.Model):
 
 class ProfileContact(models.Model):
     profile=models.ForeignKey(Profile,on_delete=models.CASCADE)
-    phone=models.CharField(blank=True,max_length=12)
-    city=models.CharField(null=True,blank=True,max_length=15)
+    phone=models.CharField(blank=True,max_length=14)
+    city=models.CharField(blank=True,max_length=15)
 
     def __str__(self):
         return self.profile.user.username
@@ -62,7 +79,7 @@ class Skills(models.Model):
 
 
     def __str__(self):
-        return self.name
+        return self.profile.user.username
 
 
 

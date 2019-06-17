@@ -1,10 +1,20 @@
 from django import forms
-from .models import Bio,Project,Certification,Interest,WorkExperience
+from .models import Educations,Project,WorkExperience
+import datetime
 
 class BioForm(forms.ModelForm):
     class Meta:
-        model=Bio
-        fields=('highest_degree','education_from')
+        model=Educations
+        fields=('masters_education_from','masters_education_till',
+                'masters_college_name',)
+
+class WorkExperienceForm(forms.ModelForm):
+
+    class Meta:
+        model=WorkExperience
+        fields=('organisation','designation',
+                'worked_from','worked_till',
+                'current','describe',)
 
 
 class ProjectForm(forms.ModelForm):
@@ -13,6 +23,9 @@ class ProjectForm(forms.ModelForm):
         fields=('title','year',
                 'link','organisation',
                 'position','description',)
+
+'''
+
 
 class InterestsForm(forms.ModelForm):
 
@@ -28,12 +41,7 @@ class CertificationsForm(forms.ModelForm):
                 'description','link',
                 'cert_image',)
 
-class WorkExperienceForm(forms.ModelForm):
-
-    class Meta:
-        model=WorkExperience
-        fields=('organisation','designation',
-                'worked_from','worked_till',
-                'current','describe',)
 
 
+
+'''

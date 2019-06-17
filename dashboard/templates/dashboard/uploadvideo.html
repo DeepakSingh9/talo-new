@@ -1,0 +1,27 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+<div class="container grey-darken-2 ">
+<div class="row" style="padding=10px;margin:10px;">
+      <div class="col center-align"><h4>Add Video</h4></div>
+          <form class="col s12 center-align" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+    <div class="file-field input-field">
+      <div class="btn">
+        <span>Select File</span>
+        <input name="video" type="file">
+      </div>
+      <div class="file-path-wrapper">
+        <input class="file-path validate" type="text">
+      </div>
+    </div>
+              <div class="file-field input-field">
+        <span>title</span>
+        <input name="title" type="text">
+    </div>
+              <div class="col s12 center-align">
+              <button type="submit" class="waves-effect waves-light btn indigo indigo-darken-4">Add</button>
+              </div>
+          </form>
+      </div>
+</div>
+{% endblock %}

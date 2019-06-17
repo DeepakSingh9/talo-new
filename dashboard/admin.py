@@ -13,10 +13,10 @@ class PostAdmin(admin.ModelAdmin):
     list_display=['video','title','profile']
 
 class ContactAdmin(admin.ModelAdmin):
-    list_display=['phone']
+    list_display=['phone','city']
 
 class SkillAdmin(admin.ModelAdmin):
-    list_display=['name','level']
+    list_display=['name','level','profile']
 
 
 

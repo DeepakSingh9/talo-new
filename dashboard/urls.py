@@ -15,4 +15,6 @@ urlpatterns=[url(r'^home/(?P<username>[\w.@+-]+)/$',views.home,name='home'),
              url(r'^edit_contact/(?P<pk>\d+)/$',views.edit_contact,name='edit_contact'),
              url(r'^delete_contact/(?P<pk>\d+)/$',views.delete_contact,name='delete_contact'),
              url(r'^follow/(?P<pk>\d+)/$',views.follow,name='follow'),
+             url(r'^addeducation/(?P<pk>\d+)/$',views.addeducation,name='addeducation'),
+             url(r'^editeducation/(?P<pk>\d+)/$',views.edit_education,name='edit_education'),
 ]

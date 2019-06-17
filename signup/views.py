@@ -25,7 +25,7 @@ def user_login(request):
                 return HttpResponse('Your account is disabled')
         else:
             return HttpResponse('Invalid login details')
-    return render(request,'', {})
+    return render(request,'signin.html', {})
 
 
 
@@ -48,14 +48,9 @@ def user_registration(request):
 
             login(request, authenticate(username=userlogin.cleaned_data['username'],
                                         password=userlogin.cleaned_data['password']))
-            return redirect('/')
+            return redirect('home',username=username)
         else:
             print (userlogin.errors, userregister.errors)
-
-
-
-
-
     else:
         userlogin = LoginForm()
         userregister = RegisterationForm()
