@@ -13,7 +13,7 @@ class ImageUpload(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model=Post
-        fields=('title','video',)
+        fields=('title','video','introduction')
 
 
 class AboutMeForm(forms.ModelForm):

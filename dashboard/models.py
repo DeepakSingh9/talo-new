@@ -17,27 +17,29 @@ class Profile(models.Model):
     #phone_regex = RegexValidator(regex=r'^\+?1?\d{9,10}$',
                                  #message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     #mobile_number = models.CharField(validators=[phone_regex], blank=True, max_length=128)
-    profile_image=models.ImageField(upload_to='profilepic/',blank=True,null=True)
+    profile_image=models.ImageField(upload_to='profilepic/',blank=True,null=True,)
     about_me=models.TextField(max_length=150,blank=True)
     #skills=models.ManyToManyField(Skill,blank=True,null=True,related_name='has_skills')
     place=models.CharField(max_length=20,blank=True,null=True)
     #followed_by=models.ManyToManyField('self',related_name='follows',symmetrical=False)
     masters_degree_name = models.CharField(max_length=150, blank=True, default='')
     masters_college_name = models.CharField(max_length=150, blank=True)
-    masters_education_from = models.DateField(default=datetime.date.today,blank=True)
-    masters_education_till = models.DateField(default=datetime.date.today,blank=True)
+    masters_education_from = models.DateField(default=datetime.date.today)
+    masters_education_till = models.DateField(default=datetime.date.today)
     bachelors_degree = models.CharField(max_length=150, blank=True)
     bachelors_college_name = models.CharField(max_length=150, blank=True)
-    bachelors_education_from = models.DateField(default=datetime.date.today,blank=True)
-    bachelors_education_till = models.DateField(default=datetime.date.today,blank=True)
+    bachelors_education_from = models.DateField(default=datetime.date.today)
+    bachelors_education_till = models.DateField(default=datetime.date.today)
     High_School_degree = models.CharField(max_length=150, blank=True)
     High_School_name = models.CharField(max_length=150, blank=True)
-    High_School_from = models.DateField(default=datetime.date.today,blank=True)
-    High_School_till = models.DateField(default=datetime.date.today,blank=True)
+    High_School_from = models.DateField(default=datetime.date.today)
+    High_School_till = models.DateField(default=datetime.date.today)
     Junior_degree = models.CharField(max_length=150, blank=True)
     Junior_School_name = models.CharField(max_length=150, blank=True)
-    Junior_School_from = models.DateField(default=datetime.date.today,blank=True)
-    Junior_School_till = models.DateField(default=datetime.date.today,blank=True)
+    Junior_School_from = models.DateField(default=datetime.date.today)
+    Junior_School_till = models.DateField(default=datetime.date.today)
+    followed_by=models.ManyToManyField('self',related_name='follows',symmetrical=False)
+    block=models.ManyToManyField('self',related_name='blocked_by',symmetrical=False)
 
 
 
@@ -61,7 +63,10 @@ class Post(models.Model):
 
 
     def __str__(self):
-        return self.title
+        return self.profile.user.username
+
+    class Meta:
+        ordering=('-introduction',)
 
 
 class ProfileContact(models.Model):

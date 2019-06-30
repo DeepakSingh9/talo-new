@@ -1,102 +1,233 @@
+
 {% extends 'dashboard/base.html' %}
 {% load staticfiles %}
 {% block content %}
-<!-- Navbar -->
-<div class="row">
+<!----------------------------------------NAVIGATION ENDS----------------------------------->
+    <div class="row full-page">
+        <nav class=" sticky nav-center teal darken-2" style="position:;">
+            <div class="nav-wrapper center-align " style="">
+                <ul class=" hide-on-med-down" style="margin-left:150px;">
+                 <li class="center">
+                     <a class="" id="home" href="{% url 'home' username=user.username %}"><i class="material-icons left ">cast</i><span>home</span></a>
+                 </li>
+                <li>
+                    <a href="{% url 'resume' username=profile.user.username %}" class="left-align"><i class="material-icons left ">school</i><span>resume</span></a>
+                </li>
+                <li class="share">
+            <a onclick="copyToClipboard('#p1')" class="share-button" style=""><i class="material-icons left">share</i>share </a>
+                </li>
+                </ul>
 
-<!-- Page Container -->
-<div class="col s3 z-depth center-align grey lighten-3" style="margin-top:10px;margin-left:40px;">
-        <!--<div class="w3-container">-->
-             {% if profile.profile.profile_image %}
-         <p class="center-align"><img src="{{profile.profile.profile_image.url}}" class="circle" style="width:150px;height:150px;" alt="Avatar"></p>
-    <h6 class="name"><span class="center-align">{{profile.get_full_name}}</span></h6>
-            <p class="name">{{profile.profile.description}}</p>
-    <p><a href="{% url 'follow' pk=profile.pk %}">follow</a></p>
-             {% else %}
-    <p class="center-align"><img src="{% static 'blank.png' %}" class="circle" style="width:150px;height:150px;" alt="Avatar"></p>
-       <h6 class="name"><span class="center-align">{{profile.get_full_name}}</span></h6>
-            <p class="name">{{profile.profile.description}}</p>
-            {% endif %}
-            {% if user.is_authenticated %}
-            {% endif %}
-     <div class="divider"></div>
-<!--ABOUT ME---->
-       <div class="section">
-         {% if not profile.profile.about_me %}
-         <blockquote>{{profile.username}} has added nothing about him</blockquote>
-         {% else %}
-           <p class="center-align"><i class="tiny material-icons center-align">account_box</i>ABOUT ME</p>
-           <p class="">{{profile.profile.about_me}}</p>
-         {% endif %}
-      </div>
-<!--CONTACT--->
+             </div>
 
-        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
-          <i class="fa fa-remove"></i>
-        </span>
-           <p class="center-align"><i class="tiny material-icons ">edit_location</i>CONTACT ME</p>
-           <p><i class="tiny material-icons">email</i>{{profile.email}}</p>
-         {% if  profile.profile.profilecontact_set.all %}
-           {% for pro in profile.profile.profilecontact_set.all %}
-    <p><i class="tiny material-icons">phone</i>{{pro.phone}}</p>
-           {% endfor %}
-           {% endif %}
+            </nav>
+        <div class="container">
+            <!----------------------SIDE PANEL ------------------------------>
+        <div class="col  center-align s3 z-depth-1 white" style="margin-top:10px;border-radius:4px;margin-left:20px;">
+                <div class="info">
+                    <span class="waves-effect right" style="margin-top:10px;"><i class="material-icons tiny">settings</i><a href=""></a></span>
+                    <div class="row">
+                        <div class="col s6">
+                            {% if user.profile.profile_image %}
+                   <img src="{{user.profile.profile_image.url}}" alt="" class="circle responsive-img" style="margin-top:10px;height:120px;width:120px">
+                            {% else %}
+                            <img src="C:/Users/DeepakS/Desktop/myvenv/mysite/dashboard/static/images/images/astro2.jpg" alt="" class="circle responsive-img" style="margin-top:10px;height:120px;width:120px;">
+
+                            {% endif %}
+                            <!-- notice the "circle" class -->
+                        </div>
+                        <div class="col s6 left-align">
+                            <div class="" style="margin-top:20px;">
+                    <p class="name" style="font-size:16px;font-weight:bold;">{{user.get_full_name}}</p>
+                    <p class="grey-text text-darken-2 who_are" style="">{{user.profile.description}}</p>
+                                <span>{{user.profile.followed_by.count}}</span>
+                                {% if viewer not in profile.followed_by.all %}
+                                <a href="{% url 'follow' username=user.username %}" class=""><i class="material-icons"></i></a>
+                                {% else %}
+                                <a href="{% url 'unfollow' username=user.username%}" class=""><i class="material-icons"></i></a>
+                                {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    <div class="divider"></div>
+                    <!-----------About Me---------->
+                    <div class="about section left-align row" style="padding:10px;">
+                        <div class="col s12" style="">
+                        <span class="name" style="font-size:16px;font-weight:bold;"><!----<i class="material- left small">account_circle</i>------------------->
+                            About Me</span>
+                        </div>
+                        {% if not user.profile.about_me %}
+                        <div class="col about_col center">
+
+                        </div>
+                        {% else %}
+                            <div class="col s12 left-align grey-text text-darken-3 info-box">
+                                    <p class="">{{user.profile.about_me}}</p>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                    <div class="divider"></div>
+                    <!--------SKILLS--------------->
+                    <div class="skills section left-align row" style="padding:10px;">
+                        <div class="col s12" style="">
+                        <span class="name" style="font-size:16px;font-weight:bold;"><!--<i class="material-icons small left">check_circle</i>-->Skills</span>
+                        </div>
+                        {% if not user.profile.skills_set.all %}
+                        <div class="row">
+                            <div class="col skill_col_empty">
+                            </div>
+                        </div>
+                            {% else %}
+                            <div class="col s12  skill_col grey-text text-darken-3 info-box">
+                            {% for skill in user.profile.skills_set.all %}
+                                    <span class="left skill-box">{{skill.name}}</span>
+
+                            {% endfor %}
+                            </div>
+                            {% endif %}
+                    </div>
+                    <div class="divider"></div>
+                    <!--------CONTACT-------------->
+                    <div class="contact section left-align row" style="padding:10px;">
+                       <div class="col s12">
+                        <span class="name" style="font-size:16px;font-weight:bold;">Contacts</span>
+                        </div>
+
+                                    <div class="col s6 contact-box">
+                                        <span class=""><i class="material-icons tiny left teal-text">email</i>Email</span>
+                                    </div>
+                                    <div class="col s6 contact-box">
+                                        <span class="">{{user.email}}</span>
+                                    </div>
 
 
-<!---------------------Skills------------------------------------------------------------------------>
-        <div class="section">
-        <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
-        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
-          <i class="fa fa-remove"></i>
-        </span>
+                        {% if  not user.profile.profilecontact_set.all %}
+                        <div class="row">
+                            <div class="col">
+                            </div>
+                        </div>
+                        {% else %}
+                        {% for pro in user.profile.profilecontact_set.all %}
 
-         {% if not profile.profile.skills_set.all %}
-         <p><strong>No Profile</strong></p>
-         {% else %}
-            <p class="center-align"><i class="tiny material-icons center-align">stars</i>SKILLS</p>
-        {% for skill in profile.profile.skills_set.all %}
-            <p>{{skill.name}}</p>
-            {% endfor %}
-         {% endif %}
-      </div>
-        </div>
-<!--------------------------------contact----------------------------------------------------------->
+                                <div class="col s6 contact-box">
+                                    <span class=""><i class="material-icons left tiny teal-text">phone</i>Phone</span>
+                                    </div>
+                                <div class="col s6 contact-box">
+<span>{% if pro.phone %}{{pro.phone}}{% else %}&nbsp;{% endif %}</span>
+                                    </div>
+                                <div class="col s6 contact-box">
+                                    <span class=""><i class="material-icons left tiny teal-text">domain</i>City</span>
+                                    </div>
+                                <div class="col s6 contact-box ">
+<span class="">{{pro.city}}</span>
+                                    </div>
 
-    <!-- End Left Column -->
+                        {% endfor %}
+
+                        {% endif %}
+
+                        <!--<div class="row">
+                                <div class="col s6 left-align skill_col">
+                                    <span class="skill_info">City</span>
+                                    </div>
+                                <div class="col s6 center-align skill_col">
+<span class="skill_info">Gurgaon,India</span>
+                                    </div>
+                                </div>-->
+                    </div>
+
+                </div>
+            </div>
 
 
+    <!----------------------Main Page-------------------------------------------->
+        <div class="col s8" style="margin-left:20px;margin-top:10px;">
+            <!-----------Video Section--------------->
+            {% if user.profile.post_set.all %}
+            {% for each in user.profile.post_set.all %}
+            {% if each.introduction %}
+            <div class="row video-col white">
+                <div class="col z-depth" style="padding:0;">
+                <video class="responsive-video" style="" controls>
+                    <source  src="{{each.video.url}}" type="video/mp4">
+                </video>
 
+                </div>
+                <div class="col s9 white valign-wrapper" style="">
+                        <p class="video_text_big">{{each.title|truncatechars:80}}</p>
+                </div>
+                    <div class="col s3 white right" style="margin-top:30px;">
 
-  </div>
-    <!-- Middle Column -->
-<div class="col s7 " style="margin-left:50px;">
-      {% if  profile.profile.post_set.all%}
-           {% for all in profile.profile.post_set.all %}
-         <div class="section ">
-          <video class="responsive-video z-depth-1" controls>
-            <source src="{{all.video.url}}" type="video/mp4">
-            </video>
-         </div>
-    <h2>{{all.title}}</h2>
+                    </div>
 
-           {% endfor %}
-        {% else %}
-      <div class="w3-row-padding">
-        <div class="w3-col m12">
-          <div class="w3-card w3-round w3-white">
-            <div class="w3-container w3-padding">
-              <h6 class="w3-opacity">Social Media template by w3.css</h6>
-              <p contenteditable="true" class="w3-border w3-padding">ADDED NOTHING</p>
 
             </div>
-          </div>
-        </div>
-      </div>
-{% endif %}
-       </div>
 
-    <!-- End Right Column -->
+            {% else %}
+            <div class="">
+                <div class="col s4">
+                    <div class="row">
+                        <div class="col">
+                    <video class="responsive-video left-align" style="padding:10px;width:100%;height:100%;" controls>
+                    <source  src="{{each.video.url}}" type="video/mp4">
+                </video>
+                        </div>
+                        <div class="col s9">
+                        <span style="padding-left:10px;">{{each.title|truncatechars:10}}
+                        </span>
+                        </div>
+                        <div class="col s3">
+                        </div>
 
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+                <div class="row">
+                    <div class="col s12 center-align"></div>
+                </div>
+            {% else %}
+                 <div class="" style="margin-left:20px;position:absolute;">
+                    <h1>{{user.username}} HAS'NT ADDED ANYTHING YET !</h1>
+                    <h4>Check {{user.username}}'s Resume</h4>
+                        <a href="{% url 'resume' username=user.username %}" class="btn white-text" type="submit" name="action">Go to Resume</a>
+                        </div>
+                    <img style="margin-left:300px;margin-top:150px;hieght:50%;width:50%" class="circle responsive" src="{% static 'images/images/astronaut_home.jpg' %}">
+                {% endif %}
 
+         </div>
+    </div>
+            </div>
+<span hidden id="p1">{{request.get_full_path}}</span>
+<script>
+$(document).ready(function(){
+   $('.modal').modal();
+   $('.dropdown-trigger').dropdown();
+});
+
+function copyToClipboard(element) {
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val($(element).text()).select();
+  document.execCommand("copy");
+  $temp.remove();
+}
+
+$(document).ready(function() {
+  // Bind click event on all the buttons inside .card
+  $(".share a").click(function() {
+
+    // Check if the clicked button has class `btn_s`
+    if ($(this).hasClass('share-button')) {
+      $(this).html('<i class="material-icons left">done</i>Link Copied').toggleClass('share-button copied-button');
+    } else {
+      $(this).html('<i class="material-icons left">share</i>share').toggleClass('copied-button share-button');
+    }
+  });
+});
+
+$("#home").focus();
+</script>
 </div>
 {% endblock %}

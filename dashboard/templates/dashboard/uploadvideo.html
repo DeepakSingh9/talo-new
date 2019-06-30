@@ -8,20 +8,34 @@
     <div class="file-field input-field">
       <div class="btn">
         <span>Select File</span>
-        <input name="video" type="file">
+        <input name="video" type="file" value="{{post.video}}">
       </div>
       <div class="file-path-wrapper">
-        <input class="file-path validate" type="text">
+        <input class="file-path validate" type="text" value="{{post.video.url}}">
       </div>
     </div>
-              <div class="file-field input-field">
-        <span>title</span>
-        <input name="title" type="text">
+              <label>
+        <input type="checkbox" {% if post.introduction %} checked="checked" {% endif %} name="introduction" id="" value="on"/>
+        <span>Your Main Video</span>
+
+      </label>
+
+
+              <div class="input-field">
+                  <i class="material-icons prefix">edit</i>
+       <label for="id_title">Title</label>
+        <input name="title" type="text" id="id_title" value="{{post.title}}">
     </div>
-              <div class="col s12 center-align">
-              <button type="submit" class="waves-effect waves-light btn indigo indigo-darken-4">Add</button>
-              </div>
+                <div class="row">
+        <div class="col s12 center-align ">
+            <button style="width:100%;" type="submit" class="waves-effect waves-light btn indigo darken-4"><i class="material-icons center">file_upload</i>submit</button>
+        </div>
+    </div>
           </form>
       </div>
 </div>
+<!--<form method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+</form>-->
 {% endblock %}

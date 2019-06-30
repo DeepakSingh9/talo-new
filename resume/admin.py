@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from .models import Educations,Project,WorkExperience
+from .models import Educations,Project,WorkExperience,Certification,Interest
 
 # Register your models here.
 
@@ -11,28 +11,22 @@ class EducationAdmin(admin.ModelAdmin):
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ['profile','title','year','description','link','organisation','position']
+    list_display = ['profile','title','year','description','link','position']
 
 class WorkexpAdmin(admin.ModelAdmin):
     list_display = ['profile','organisation','designation','worked_from','worked_till','current','describe']
 
-'''
-
-
 
 class CertificationAdmin(admin.ModelAdmin):
-    list_display = ['education','title','link','cert_image','description','year']
-
+    list_display = ['profile','title','link','cert_image','year']
 
 class InterestAdmin(admin.ModelAdmin):
-    list_display = ['education','name']'''
+    list_display = ['profile','interest']
+
 admin.site.register(Project,ProjectAdmin)
 admin.site.register(Educations, EducationAdmin)
 admin.site.register(WorkExperience,WorkexpAdmin)
-'''
 admin.site.register(Certification,CertificationAdmin)
+admin.site.register(Interest,InterestAdmin)
 
-
-
-admin.site.register(Interest,InterestAdmin)'''
 

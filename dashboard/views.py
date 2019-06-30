@@ -7,30 +7,41 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from .forms import ImageUpload,PostForm,AboutMeForm,AddSkill,AddContact,AddEducation
-from dashboard.models import Profile,Skills,ProfileContact
+from dashboard.models import Profile,Skills,ProfileContact,Post
 from django.contrib.auth import login,logout,authenticate
+import datetime
+from django.db.models import Q
+from django.contrib import messages
 # Create your views here.
 
 def home(request,username):
     user=request.user
     profile=Profile.objects.get(user=user)
     if username != user.username:
-        return render(request,'dashboard/profile.html',{'profile':profile,'user':user})
+        return redirect('profile',username=username)
     else:
         return render(request,'dashboard/home.html',{'user':user,'profile':profile})
 
 
+def profile(request,username):
+    current_user=request.user
+    viewer=Profile.objects.get(user=current_user)
+    user=get_object_or_404(User,username=username)
+    profile=get_object_or_404(Profile,user=User.objects.get(username=username))
+    return render(request,'dashboard/profile.html',{'user':user,'profile':profile,'viewer':viewer})
+
+
 @login_required()
-def profile_image_upload(request,pk):
+def profile_image_upload(request,username):
     image=False
     user = request.user
-    profile = get_object_or_404(Profile, pk=user.id)
+    profile = get_object_or_404(Profile,user=User.objects.get(username=username))
     if request.method =='POST':
         form = ImageUpload(request.POST,request.FILES)
         if form.is_valid():
             profile.profile_image=request.FILES['file']
             profile.save()
-            return redirect('/')
+            return redirect('home',username=profile.user.username)
         else:
             return HttpResponse('please choose an image')
     else:
@@ -56,6 +67,30 @@ def uploadskills(request):
     else:
         form = PostForm()
     return render(request, 'dashboard/uploadvideo.html', {'form': form,})
+
+def edit_video(request,pk):
+    user=request.user
+    profile=Profile.objects.get(user=user)
+    post=Post.objects.get(pk=pk)
+    if request.method == 'POST':
+        form=PostForm(request.POST,instance=post,)
+        if form.is_valid():
+            form.save(commit=False)
+            form.profile=profile
+            form.save()
+            return redirect('home',username=profile.user.username)
+        else:
+            HttpResponse('form is incomplete')
+    else:
+        form=PostForm(instance=post)
+    return render(request,'dashboard/uploadvideo.html',{'form':form,'post':post})
+
+
+def delete_video(request,pk):
+    user=request.user
+    post= get_object_or_404(Post,pk=pk)
+    post.delete()
+    return redirect('home',username=user.username)
 
 
 def aboutme(request,pk):
@@ -160,15 +195,15 @@ def addcontact(request):
             HttpResponse('form is incomplete')
     else:
         form=AddContact()
-    return render(request,'dashboard/addcontact.html',{'form':form})
+    return render(request,'dashboard/addcontact.html',{'form':form,'profile':profile,})
 
 
 def edit_contact(request,pk):
     user=request.user
     profile=Profile.objects.get(user=user)
-    Contact=ProfileContact.objects.get(profile=profile)
+    contact=ProfileContact.objects.get(profile=profile)
     if request.method == 'POST':
-        form=AddContact(request.POST,instance=Contact)
+        form=AddContact(request.POST,instance=contact)
         if form.is_valid():
             form.save(commit=False)
             form.profile=profile
@@ -177,8 +212,8 @@ def edit_contact(request,pk):
         else:
             HttpResponse('form is incomplete')
     else:
-        form=AddContact(instance=Contact)
-    return render(request,'dashboard/addcontact.html',{'form':form})
+        form=AddContact(instance=contact)
+    return render(request,'dashboard/addcontact.html',{'form':form,'profile':profile,'contact':contact,})
 
 
 
@@ -187,25 +222,13 @@ def delete_contact(request,pk):
     contact.delete()
     return redirect('/')
 
-@login_required()
-def follow(request,pk):
-    profile=get_object_or_404(User,id=pk)
-    user=request.user
-    if user.is_authenticated():
-        if user.id != get_object_or_404(User,id=pk):
-            try:
-                profile.profile.followed_by.add(user.profile)
-                following = True
-                return redirect('home',username=profile.username)
-            except ObjectDoesNotExist:
-                return HttpResponse('The author you are following has removed the account')
 
-    return redirect(request,'/',{})
 
 
 def addeducation(request,pk):
     user = get_object_or_404(User, pk=pk)
     profile=Profile.objects.get(user=user)
+    date=datetime.date.today()
 
     if request.method=='POST':
         form=AddEducation(request.POST)
@@ -231,10 +254,10 @@ def addeducation(request,pk):
             profile.save()
             return redirect('resume',username=user.username)
         else:
-            print (form.errors)
+            return HttpResponse(form.errors)
     else:
         form=AddEducation()
-    return render(request,'dashboard/addeducation.html',{'form':form})
+    return render(request,'dashboard/addeducation.html',{'form':form,'profile':profile,'date':date,})
 
 
 def edit_education(request,pk):
@@ -249,7 +272,82 @@ def edit_education(request,pk):
             profile.save()
             return redirect('resume',username=user.username)
         else:
-           form.errors
+            return HttpResponse(form.errors)
     else:
         form=AddEducation(instance=profile)
     return render(request,'dashboard/addeducation.html',{'form':form,'profile':profile})
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('signin')
+
+
+
+
+def search(request):
+    user=request.user
+    if request.method=='POST':
+        srch=request.POST['search']
+
+        if srch:
+            match=Profile.objects.filter(Q(user__first_name__icontains=srch)|
+                                         Q(description__icontains=srch)
+                                         )
+            if match:
+                return render(request,'dashboard/search.html',{'match':match})
+
+            else:
+                messages.error(request, 'no result found')
+                return render(request, 'dashboard/search.html', {})
+        else:
+            return redirect('home',username=user.username)
+    else:
+        return render(request,'dashboard/search.html')
+
+
+
+
+def follow(request,username):
+    profile=get_object_or_404(Profile,user=User.objects.get(username=username))
+    current_user=request.user
+    viewer=Profile.objects.get(user=current_user)
+    if current_user.is_authenticated():
+        if viewer != profile.user:
+            profile.followed_by.add(viewer)
+            return redirect('profile',username=profile.user.username)
+    return redirect('profile',username=profile.user.username)
+
+
+
+
+
+def unfollow(request,username):
+    profile = get_object_or_404(Profile, user=User.objects.get(username=username))
+    current_user = request.user
+    viewer=Profile.objects.get(user=current_user)
+    if current_user.is_authenticated():
+        profile.followed_by.remove(viewer)
+        return redirect('profile',username=profile.user.username)
+    return redirect('profile',username=profile.user.username)
+
+
+def block(request,username):
+    profile=get_object_or_404(Profile,user=User.objects.get(username=username))
+    current_user=request.user
+    viewer=Profile.objects.get(user=current_user)
+    if current_user.is_authenticated():
+        if viewer != profile:
+            viewer.block.add(profile)
+            return redirect('profile',username=profile.user.username)
+    return redirect('profile',username=profile.user.username)
+
+
+def unblock(request,username):
+    profile = get_object_or_404(Profile, user=User.objects.get(username=username))
+    current_user = request.user
+    viewer=Profile.objects.get(user=current_user)
+    if current_user.is_authenticated():
+        viewer.block.remove(profile)
+        return redirect('profile',username=profile.user.username)
+    return redirect('profile',username=profile.user.username)

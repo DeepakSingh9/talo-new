@@ -7,6 +7,7 @@ from .models import Profile,Post,ProfileContact,Skills
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ['user','description','profile_image']
+    search_fields=['user__first_name','description']
 
 
 class PostAdmin(admin.ModelAdmin):
