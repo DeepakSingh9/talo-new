@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dashboard',
     'signup',
-    'phone_field',
     'resume',
 ]
 

@@ -4,7 +4,7 @@ from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.conf import settings
-from phone_field import PhoneField
+
 import datetime
 
 
