@@ -53,7 +53,7 @@ class Profile(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=128)
+    title = models.CharField(max_length=128,blank=True)
     created = models.DateTimeField(auto_now=True)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     likes = models.IntegerField(blank=True, null=True)

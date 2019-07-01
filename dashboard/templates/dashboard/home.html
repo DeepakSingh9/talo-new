@@ -189,11 +189,11 @@ edit about me</a></li>
                 <div class="col s9 white valign-wrapper" style="">
                         <p class="video_text_big">{{each.title|truncatechars:80}}</p>
                 </div>
-                    <div class="col s3 white right" style="margin-top:30px;">
+                    <div class="col s3 white right" style="margin-top:10px;">
                         <div class="more-icons">
                                 <a href="" class="dropdown-trigger" data-target="dropdown4">
 
-                            <i class="icons material-icons teal-text" >settings</i></a>
+                            <i class="icons material-icons small teal-text" >more_vert</i></a>
                          <ul id='dropdown4' class='dropdown-content'>
                              <li><a href="{% url 'edit_video' pk=each.pk %}">edit</a></li>
                              <li><a href="{% url 'delete_video' pk=each.pk %}">delete</a></li>

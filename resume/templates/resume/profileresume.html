@@ -35,14 +35,13 @@
                             <!-- notice the "circle" class -->
                         </div>
                         <div class="col s6 left-align">
-                            <div class="" style="margin-top:20px;">
+                            <div class="" style="margin-top:-20px;">
                     <p class="name" style="font-size:16px;font-weight:bold;">{{user.get_full_name}}</p>
                     <p class="grey-text text-darken-2 who_are" style="">{{user.profile.description}}</p>
-                                <span>{{user.profile.followed_by.count}}</span>
                                 {% if viewer not in profile.followed_by.all %}
-                                <a href="{% url 'follow' username=user.username %}" class=""><i class="material-icons"></i></a>
+                                <p style="margin-top:-10px !important;"><a href="{% url 'follow' username=user.username %}" class="btn-flat waves-effect waves-yellow grey lighten-1"><i class="large left material-icons ">star_border</i>|&nbsp;{{user.profile.followed_by.count}}</a></p>
                                 {% else %}
-                                <a href="{% url 'unfollow' username=user.username%}" class=""><i class="material-icons"></i></a>
+                                <p style="margin-top:-10px !important;"><a href="{% url 'unfollow' username=user.username%}" class="btn-flat waves-effect waves-yellow grey lighten-1"><i class="large left material-icons yellow-text text-accent-2">star</i>|&nbsp;{{user.profile.followed_by.count}}</a></p>
                                 {% endif %}
                                 </div>
                             </div>
